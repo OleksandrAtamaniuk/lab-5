@@ -1,0 +1,110 @@
+#include <iostream> // бібліотека для вводу/виводу
+#include <cstring> // бібліотека для роботи з C-рядками (strcpy, strlen)
+
+using namespace std; // щоб не писати std::
+
+// Клас Tail (Хвіст)
+class Tail {
+private:
+int length; // довжина хвоста
+
+public:
+
+Tail() {
+length = 0; // значення за замовчуванням
+}
+
+Tail(int l) {
+length = l; // ініціалізація довжини
+}
+
+int getLength() {
+return length; // повертає довжину хвоста
+}
+};
+
+// Базовий клас Dog (Собака)
+class Dog {
+protected:
+Tail tail; // об'єкт класу Tail (композиція)
+char* color; // колір (динамічний рядок)
+int age; // вік
+
+public:
+
+Dog() {
+color = new char[10]; // виділення пам'яті
+strcpy(color, "невідомо"); // запис значення
+age = 0; // вік за замовчуванням
+}
+
+Dog(int tailLength, const char* c, int a) : tail(tailLength) {
+color = new char[strlen(c) + 1]; // виділення пам'яті під рядок
+strcpy(color, c); // копіювання рядка
+age = a; // ініціалізація віку
+}
+
+~Dog() {
+delete[] color; // звільнення пам'яті
+}
+};
+
+
+// Похідний клас PetDog (Свійська собака)
+class PetDog : public Dog {
+private:
+char* nickname; // кличка (динамічний рядок)
+
+public:
+
+PetDog() : Dog() {
+nickname = new char[10]; // виділення пам'яті
+strcpy(nickname, "Безіменний"); // значення за замовчуванням
+}
+
+PetDog(int tailLength, const char* c, int a, const char* n)
+: Dog(tailLength, c, a) {
+
+nickname = new char[strlen(n) + 1]; // виділення пам'яті
+strcpy(nickname, n); // копіювання клички
+}
+
+~PetDog() {
+delete[] nickname; // звільнення пам'яті
+}
+
+void print() {
+cout << "Довжина хвоста: " << tail.getLength() << endl; // вивід довжини хвоста
+cout << "Колір: " << color << endl; // вивід кольору
+cout << "Вік: " << age << endl; // вивід віку
+cout << "Кличка: " << nickname << endl; // вивід клички
+}
+};
+
+
+int main() {
+
+int tailLength; // довжина хвоста
+int age; // вік
+char color[50]; // масив для кольору
+char nickname[50];// масив для клички
+
+cout << "Введіть довжину хвоста: ";
+cin >> tailLength; // введення довжини
+
+cout << "Введіть колір собаки: ";
+cin >> color; // введення кольору
+
+cout << "Введіть вік собаки: ";
+cin >> age; // введення віку
+
+cout << "Введіть кличку собаки: ";
+cin >> nickname; // введення клички
+
+PetDog dog(tailLength, color, age, nickname); // створення об'єкта
+
+cout << "\nІнформація про собаку:\n";
+dog.print(); // вивід інформації
+
+return 0; // завершення програми
+}
