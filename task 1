@@ -1,0 +1,124 @@
+#include <iostream> // підключає бібліотеку для вводу/виводу (cout, cin)
+#include <string> // підключає бібліотеку для роботи з рядками
+
+using namespace std; // дозволяє не писати std:: перед cout, cin, string
+
+// Базовий клас Animal (Тварина)
+class Animal {
+protected: // доступний у цьому та дочірніх класах
+string classification; // класифікація тварини (наприклад: ссавець)
+int limbs; // кількість кінцівок
+int offspring; // кількість нащадків
+
+public:
+
+// Конструктор за замовчуванням
+Animal() {
+classification = "Невідомо"; // значення за замовчуванням
+limbs = 0;
+offspring = 0;
+}
+
+// Конструктор з параметрами
+Animal(string c, int l, int o) {
+classification = c; // присвоєння переданих значень
+limbs = l;
+offspring = o;
+}
+
+// Деструктор (викликається при знищенні об'єкта)
+~Animal() {
+cout << "Об'єкт тварини знищено\n"; // повідомлення
+}
+
+// Сеттер для зміни кількості нащадків
+void setOffspring(int o) {
+offspring = o;
+}
+
+// Метод для виводу інформації
+void print() {
+cout << "Класифікація тварини: " << classification << endl;
+cout << "Кількість кінцівок: " << limbs << endl;
+cout << "Кількість нащадків: " << offspring << endl;
+}
+};
+
+
+// Дочірній клас DomesticAnimal (Свійська тварина)
+class DomesticAnimal : public Animal { // наслідує Animal
+private:
+string nickname; // кличка тварини
+
+public:
+
+// Конструктор за замовчуванням
+DomesticAnimal() : Animal() { // виклик конструктора базового класу
+nickname = "Без клички"; // значення за замовчуванням
+}
+
+// Конструктор з параметрами
+DomesticAnimal(string c, int l, int o, string n) : Animal(c, l, o) {
+nickname = n; // ініціалізація клички
+}
+
+// Деструктор
+~DomesticAnimal() {
+cout << "Об'єкт свійської тварини знищено\n";
+}
+
+// Сеттер для зміни клички
+void setNickname(string n) {
+nickname = n;
+}
+
+// Перевизначений метод print()
+void print() {
+Animal::print(); // виклик методу базового класу
+cout << "Кличка: " << nickname << endl; // додатковий вивід
+}
+};
+
+
+int main() {
+
+string classification; // змінна для класифікації
+string nickname; // змінна для клички
+int limbs; // кількість кінцівок
+int offspring; // кількість нащадків
+
+cout << "Введіть класифікацію тварини: ";
+cin >> classification; // введення класифікації
+
+cout << "Введіть кількість кінцівок: ";
+cin >> limbs; // введення кінцівок
+
+cout << "Введіть кількість нащадків: ";
+cin >> offspring; // введення нащадків
+
+cout << "Введіть кличку тварини: ";
+cin >> nickname; // введення клички
+
+cout << "\n--- Створення об'єкта ---\n";
+
+// створення об'єкта класу DomesticAnimal
+DomesticAnimal animal(classification, limbs, offspring, nickname);
+
+cout << "\n--- Інформація про тварину ---\n";
+animal.print(); // вивід інформації
+
+cout << "\nЗміна даних.\n";
+
+cout << "Введіть нову кличку: ";
+cin >> nickname;
+animal.setNickname(nickname); // зміна клички
+
+cout << "Введіть нову кількість нащадків: ";
+cin >> offspring;
+animal.setOffspring(offspring); // зміна нащадків
+
+cout << "\n--- Оновлена інформація ---\n";
+animal.print(); // вивід оновлених даних
+
+return 0; // завершення програми
+}
