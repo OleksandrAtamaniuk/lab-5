@@ -1,0 +1,108 @@
+#include <iostream> // бібліотека для вводу/виводу
+#include <string> // бібліотека для роботи з рядками
+
+using namespace std; // щоб не писати std::
+
+// Базовий клас Education (Освіта)
+class Education {
+protected:
+string type; // тип освіти
+int years; // тривалість навчання
+
+public:
+// Конструктор з параметрами (з значеннями за замовчуванням)
+Education(string t = "невідомо", int y = 0) {
+type = t; // ініціалізація типу
+years = y; // ініціалізація тривалості
+}
+
+// Конструктор копіювання
+Education(const Education& other) {
+type = other.type; // копіювання типу
+years = other.years; // копіювання тривалості
+}
+
+// Перевантажений оператор присвоєння
+Education& operator=(const Education& other) {
+if (this != &other) { // перевірка на самоприсвоєння
+type = other.type; // копіювання типу
+years = other.years; // копіювання тривалості
+}
+return *this; // повернення поточного об'єкта
+}
+
+// Перевантаження оператора виводу <<
+friend ostream& operator<<(ostream& out, const Education& e) {
+out << "Тип освіти: " << e.type << endl; // вивід типу
+out << "Тривалість: " << e.years << " років" << endl; // вивід років
+return out;
+}
+
+// Перевантаження оператора вводу >>
+friend istream& operator>>(istream& in, Education& e) {
+cout << "Тип освіти: ";
+getline(in, e.type); // введення рядка
+
+cout << "Роки навчання: ";
+in >> e.years; // введення числа
+in.ignore(); // очищення буфера
+
+return in;
+}
+};
+
+// Похідний клас HigherEducation (Вища освіта)
+class HigherEducation : public Education {
+private:
+string university; // назва університету
+
+public:
+// Конструктор з параметрами
+HigherEducation(string t = "невідомо", int y = 0, string u = "невідомо")
+: Education(t, y) { // виклик конструктора базового класу
+university = u; // ініціалізація університету
+}
+
+// Конструктор копіювання
+HigherEducation(const HigherEducation& other)
+: Education(other) { // копіювання базової частини
+university = other.university; // копіювання університету
+}
+
+// Оператор присвоєння
+HigherEducation& operator=(const HigherEducation& other) {
+if (this != &other) {
+Education::operator=(other); // виклик базового оператора
+university = other.university; // копіювання університету
+}
+return *this;
+}
+
+// Перевантаження оператора виводу <<
+friend ostream& operator<<(ostream& out, const HigherEducation& h) {
+out << (Education&)h; // приведення до базового класу і вивід
+out << "Університет: " << h.university << endl; // вивід університету
+return out;
+}
+
+// Перевантаження оператора вводу >>
+friend istream& operator>>(istream& in, HigherEducation& h) {
+in >> (Education&)h; // введення базової частини
+
+cout << "Університет: ";
+getline(in, h.university); // введення університету
+
+return in;
+}
+};
+
+int main() {
+HigherEducation student; // створення об'єкта
+
+cin >> student; // введення даних
+
+cout << "\nІнформація:\n";
+cout << student; // вивід даних
+
+return 0; // завершення програми
+}
